@@ -1,0 +1,56 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.12, pytest-9.0.3, pluggy-1.6.0
+rootdir: /home/kalix/my-tools/BlackOps_2.0
+configfile: pyproject.toml
+plugins: asyncio-1.4.0, anyio-4.13.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collected 2 items
+
+tests/test_dir_fuzzer.py F.
+
+=================================== FAILURES ===================================
+____________________________ test_fuzzer_found_path ____________________________
+
+    @pytest.mark.asyncio
+    async def test_fuzzer_found_path():
+        fuzzer = DirFuzzer()
+    
+        # Mocking aiohttp session and response
+        mock_session = AsyncMock()
+        mock_response = AsyncMock()
+        mock_response.status = 200
+        mock_session.get.return_value.__aenter__.return_value = mock_response
+    
+        # Capture print output for verification
+        with patch("builtins.print") as mock_print:
+            await fuzzer._check_path(mock_session, "http://test.com", "admin")
+    
+            # Verify the print for found path was called
+            # mock_print is called with the formatted string
+            # Strip ANSI escape codes
+            import re
+            ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    
+            called_args = [ansi_escape.sub('', call[0][0]) for call in mock_print.call_args_list if call[0]]
+            print(f"DEBUG: mock_print.call_args_list: {mock_print.call_args_list}")
+            for arg in called_args:
+                print(f"DEBUG ARG: {repr(arg)}")
+            print(f"DEBUG: {called_args}")
+    
+>           assert any("[+] Found: http://test.com/admin (200)" in arg for arg in called_args)
+E           assert False
+E            +  where False = any(<generator object test_fuzzer_found_path.<locals>.<genexpr> at 0x7f844557d0>)
+
+tests/test_dir_fuzzer.py:38: AssertionError
+=============================== warnings summary ===============================
+tests/test_dir_fuzzer.py::test_fuzzer_found_path
+tests/test_dir_fuzzer.py::test_fuzzer_not_found_path
+  /home/kalix/my-tools/BlackOps_2.0/src/modules/dir_fuzzer.py:21: RuntimeWarning: coroutine 'AsyncMockMixin._execute_mock_call' was never awaited
+    async with session.get(target, timeout=2) as response:
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_dir_fuzzer.py::test_fuzzer_found_path - assert False
+=================== 1 failed, 1 passed, 2 warnings in 0.70s ====================

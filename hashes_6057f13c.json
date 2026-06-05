@@ -1,0 +1,9 @@
+{
+  "input": "hey",
+  "hashes": {
+    "MD5": "6057f13c496ecf7fd777ceb9e79ae285",
+    "SHA1": "7f550a9f4c44173a37664d938f1355f0f92a47a7",
+    "SHA256": "fa690b82061edfd2852629aeba8a8977b57e40fcb77d1a7a28b26cba62591204",
+    "SHA512": "0601d109d0d2b0fa9c4484b4a5c94ee5ecc62ccec3bd7d99e972d18994d0e2e42f6d0fcfc41216a5ab72ee7af96d213e1c314abdde40f52731ff24c2bf8f7323"
+  }
+}

@@ -1,0 +1,8 @@
+services:
+  blackops:
+    build: .
+    volumes:
+      - .:/app
+    privileged: true
+    stdin_open: true
+    tty: true
